@@ -27,17 +27,18 @@ public class TaskServiceImpl implements TaskService {
         if(exist) {
             taskRepository.deleteById(id);
         }
-
-        throw new NotFoundException("task with id: " + id + " doesn't exist");
+        else {
+            throw new NotFoundException("task with id: " + id + " doesn't exist");
+        }
     }
 
     @Override
-    public Task create(Task task) {
+    public Task create(final Task task) {
         return taskRepository.save(task);
     }
 
     @Override
-    public Task update(Long id, Task task) throws NotFoundException {
+    public Task update(Long id, final Task task) throws NotFoundException {
         boolean exist = taskRepository.existsById(id);
 
         if(exist) {
@@ -65,14 +66,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task finished(Long id) throws NotFoundException {
-        Optional<Task> task = taskRepository.findById(id);
+        Task task = this.findById(id);
+        task.setState(State.FINISHED);
 
-        if(task.isEmpty()) {
-            throw new NotFoundException("task with id: " + id + " doesn't exist");
-        }
-
-        task.get().setState(State.FINISHED);
-
-        return taskRepository.save(task.get());
+        return taskRepository.save(task);
     }
+
 }

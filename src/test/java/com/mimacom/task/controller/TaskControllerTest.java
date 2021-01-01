@@ -1,6 +1,9 @@
 package com.mimacom.task.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.mimacom.task.configuration.WebConfig;
@@ -42,6 +45,42 @@ public class TaskControllerTest {
         mockMvc.perform(get("/tasks")
             .contentType("application/json")
             .accept("application/json")
+            .characterEncoding("utf-8"))
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void getTaskById_should_return_a_task() throws Exception {
+        mockMvc.perform(get("/tasks/1")
+            .contentType("application/json")
+            .accept("application/json")
+            .characterEncoding("utf-8"))
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void delete_should_return_sucess() throws Exception {
+        mockMvc.perform(delete("/tasks/1")
+            .contentType("application/json")
+            .accept("application/json")
+            .characterEncoding("utf-8"))
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void finished_should_return_sucess() throws Exception {
+        mockMvc.perform(post("/tasks/finished/1")
+            .contentType("application/json")
+            .accept("application/json")
+            .characterEncoding("utf-8"))
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void create_should_return_sucess() throws Exception {
+        mockMvc.perform(post("/tasks")
+            .contentType("application/json")
+            .accept("application/json")
             .characterEncoding("utf-8")
             .content(objectMapperBuilder.build().writeValueAsString(
                 TaskDTO.builder().build()
@@ -50,8 +89,8 @@ public class TaskControllerTest {
     }
 
     @Test
-    void getTaskById_should_return_a_task() throws Exception {
-        mockMvc.perform(get("/tasks/1")
+    void update_should_return_sucess() throws Exception {
+        mockMvc.perform(put("/tasks/1")
             .contentType("application/json")
             .accept("application/json")
             .characterEncoding("utf-8")
